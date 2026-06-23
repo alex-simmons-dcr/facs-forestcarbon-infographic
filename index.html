@@ -24,9 +24,9 @@
       margin: 0;
       display: flex;
       justify-content: center;
-      padding: 20px;
+      padding: 10px;
       color: #333;
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
     
     .infographic {
@@ -35,14 +35,14 @@
       margin: 0;
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 16px;
     }
 
-    /* Vertical Layout: Emitted on Top, Sequestered on Bottom */
+    /* Side-by-Side Layout: Sequestered on Left, Emitted on Right */
     .visualization-container {
       display: flex;
-      flex-direction: column;
-      gap: 24px;
+      flex-direction: row;
+      gap: 16px;
       width: 100%;
     }
 
@@ -50,67 +50,71 @@
     .panel-emitted, .panel-sequestered {
       border: 1px solid var(--color-border);
       border-radius: 8px;
-      padding: 16px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 10px;
       opacity: 0;
       animation: fadeInUp 0.6s ease forwards;
     }
 
-    .panel-emitted {
-      background-color: rgba(0, 0, 0, 0.02);
+    .panel-sequestered {
+      flex: 0 0 auto;
+      background-color: rgba(27, 94, 32, 0.04);
+      border-color: rgba(27, 94, 32, 0.2);
+      align-items: center;
+      min-width: 90px;
       animation-delay: 0.1s;
     }
 
-    .panel-sequestered {
-      background-color: rgba(27, 94, 32, 0.04);
-      border-color: rgba(27, 94, 32, 0.2);
+    .panel-emitted {
+      flex: 1;
+      background-color: rgba(0, 0, 0, 0.02);
       animation-delay: 0.2s;
     }
 
     .panel-title {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       font-weight: 600;
       color: #666;
-      margin-bottom: 4px;
+      margin-bottom: 0px;
     }
 
     /* Sector Specific Gestalt Groupings */
     .sector-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 8px;
     }
 
     .sector-group {
       background-color: #ffffff;
       border: 1px solid var(--color-border);
       border-radius: 6px;
-      padding: 12px;
+      padding: 8px;
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
       align-content: flex-start;
       opacity: 0;
       animation: fadeInUp 0.5s ease forwards;
     }
 
-    /* Staggered entrance animations for individual sector blocks */
-    .group-factory  { animation-delay: 0.3s; max-width: 120px; }
-    .group-plug     { animation-delay: 0.4s; max-width: 160px; }
-    .group-building { animation-delay: 0.5s; max-width: 280px; }
-    .group-car      { animation-delay: 0.6s; max-width: 320px; }
-    .group-tree     { animation-delay: 0.7s; max-width: 120px; border-color: rgba(27, 94, 32, 0.3); }
+    /* Staggered entrance animations */
+    .group-tree     { animation-delay: 0.3s; max-width: 100px; border-color: rgba(27, 94, 32, 0.3); }
+    .group-factory  { animation-delay: 0.4s; max-width: 100px; }
+    .group-plug     { animation-delay: 0.5s; max-width: 140px; }
+    .group-building { animation-delay: 0.6s; max-width: 240px; }
+    .group-car      { animation-delay: 0.7s; max-width: 280px; }
 
     /* Icon Sizing & Interactive States */
     .icon-wrapper {
       position: relative;
       cursor: pointer;
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       transition: transform 0.2s ease, opacity 0.3s ease;
     }
     
@@ -136,16 +140,16 @@
     .legend-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 4px;
       border-top: 1px solid var(--color-border);
-      padding-top: 20px;
+      padding-top: 12px;
     }
 
     .legend-row {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 6px 12px;
+      padding: 4px 8px;
       border-radius: 4px;
       cursor: pointer;
       transition: background-color 0.2s ease, opacity 0.3s ease;
@@ -157,15 +161,15 @@
     }
 
     .legend-icon {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       flex-shrink: 0;
     }
     .legend-icon.grey svg { fill: var(--color-grey-icon); }
     .legend-icon.green svg { fill: var(--color-green-icon); }
 
     .legend-text {
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
 
     /* Unified Global Interactivity Dimming Rules */
@@ -181,14 +185,8 @@
 
     /* CSS Keyframes for Entrance Animation */
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* AI Disclaimer Badge at Bottom */
@@ -196,41 +194,50 @@
       background-color: #f0f4f8;
       border: 1px solid #d9e2ec;
       color: #486581;
-      font-size: 0.85rem;
-      padding: 8px 12px;
+      font-size: 0.8rem;
+      padding: 6px 10px;
       border-radius: 6px;
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-top: 16px;
+      margin-top: 8px;
     }
 
     .ai-disclaimer svg {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       fill: #486581;
     }
 
     /* Responsive scaling for embedding in narrow viewports */
     @media (max-width: 650px) {
+      .visualization-container { flex-direction: column; }
+      .panel-sequestered { flex-direction: row; flex-wrap: wrap; justify-content: center; }
       .sector-group { max-width: 100% !important; }
-      .icon-wrapper { width: 24px; height: 24px; }
+      .icon-wrapper { width: 22px; height: 22px; }
     }
     @media (max-width: 450px) {
-      .icon-wrapper { width: 22px; height: 22px; }
-      body { padding: 10px; font-size: 1rem; }
-      .ai-disclaimer { flex-direction: column; gap: 4px; padding: 12px; }
+      .icon-wrapper { width: 18px; height: 18px; }
+      body { padding: 5px; font-size: 0.9rem; }
+      .ai-disclaimer { flex-direction: column; gap: 4px; padding: 8px; }
     }
   </style>
 </head>
 <body>
 
-  <figure class="infographic" id="info-container" aria-label="Infographic showing 67 million metric tonnes of emissions across four human sectors on the top, compared to 4 million metric tonnes of sequestered forest carbon on the bottom.">
+  <figure class="infographic" id="info-container" aria-label="Infographic showing 4 million metric tonnes of sequestered forest carbon on the left, compared to 67 million metric tonnes of emissions across four human sectors on the right.">
     
     <div class="visualization-container">
       
+      <div class="panel-sequestered">
+        <div class="panel-title">Sequestered</div>
+        <div class="sector-container">
+           <div class="sector-group group-tree" id="grid-tree"></div>
+        </div>
+      </div>
+
       <div class="panel-emitted">
         <div class="panel-title">Emitted</div>
         <div class="sector-container">
@@ -238,13 +245,6 @@
           <div class="sector-group group-plug" id="grid-plug"></div>
           <div class="sector-group group-building" id="grid-building"></div>
           <div class="sector-group group-car" id="grid-car"></div>
-        </div>
-      </div>
-
-      <div class="panel-sequestered">
-        <div class="panel-title">Sequestered</div>
-        <div class="sector-container">
-           <div class="sector-group group-tree" id="grid-tree"></div>
         </div>
       </div>
 
@@ -292,19 +292,17 @@
     };
 
     const config = [
+      { type: 'tree', count: 4, target: document.getElementById('grid-tree'), color: 'green' },
       { type: 'factory', count: 6, target: document.getElementById('grid-factory'), color: 'grey' },
       { type: 'plug', count: 12, target: document.getElementById('grid-plug'), color: 'grey' },
       { type: 'building', count: 23, target: document.getElementById('grid-building'), color: 'grey' },
-      { type: 'car', count: 26, target: document.getElementById('grid-car'), color: 'grey' },
-      { type: 'tree', count: 4, target: document.getElementById('grid-tree'), color: 'green' }
+      { type: 'car', count: 26, target: document.getElementById('grid-car'), color: 'grey' }
     ];
 
     // Populate Visual Grid Elements and Legend Samples
     config.forEach(item => {
-      // Setup the sample icon inside the corresponding legend row
       document.getElementById(`leg-${item.type}`).innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[item.type]}</svg>`;
 
-      // Inject the individual visual blocks
       for (let i = 0; i < item.count; i++) {
         const wrapper = document.createElement('div');
         wrapper.className = `icon-wrapper group-${item.type} ${item.color}`;
@@ -313,7 +311,6 @@
         wrapper.setAttribute('aria-label', `${item.type} metric unit icon`);
         wrapper.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[item.type]}</svg>`;
         
-        // Dynamic event attachments
         wrapper.addEventListener('mouseenter', () => activateGroup(item.type));
         wrapper.addEventListener('focus', () => activateGroup(item.type));
         wrapper.addEventListener('mouseleave', clearGroup);
@@ -335,12 +332,10 @@
     function activateGroup(type) {
       infoContainer.classList.add('is-interacting');
       
-      // Target matching icons
       document.querySelectorAll('.icon-wrapper').forEach(el => {
         el.classList.toggle('active-group', el.classList.contains(`group-${type}`));
       });
 
-      // Target matching legend row
       document.querySelectorAll('.legend-row').forEach(el => {
         el.classList.toggle('active-group', el.classList.contains(`row-${type}`));
       });
