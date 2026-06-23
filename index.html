@@ -227,7 +227,7 @@
 </head>
 <body>
 
-  <figure class="infographic" id="info-container" aria-label="Infographic showing 4 million metric tons of sequestered forest carbon on the left, compared to 68 million metric tons of emissions across four human sectors on the right.">
+  <figure class="infographic" id="info-container" aria-label="Infographic showing 4 million metric tons of sequestered forest carbon on the left, compared to 67 million metric tons of emissions across four human sectors on the right.">
     
     <div class="visualization-container">
       
@@ -257,11 +257,11 @@
       </div>
       <div class="legend-row row-plug" tabindex="0" data-type="plug">
         <div class="legend-icon grey" id="leg-plug"></div>
-        <div class="legend-text"><strong>Electric Power Sector:&nbsp;</strong> 11 million metric tons CO₂e</div>
+        <div class="legend-text"><strong>Electric Power Sector:&nbsp;</strong> 12 million metric tons CO₂e</div>
       </div>
       <div class="legend-row row-building" tabindex="0" data-type="building">
         <div class="legend-icon grey" id="leg-building"></div>
-        <div class="legend-text"><strong>Building Sector:&nbsp;</strong> 25 million metric tons CO₂e</div>
+        <div class="legend-text"><strong>Building Sector:&nbsp;</strong> 23 million metric tons CO₂e</div>
       </div>
       <div class="legend-row row-car" tabindex="0" data-type="car">
         <div class="legend-icon grey" id="leg-car"></div>
@@ -291,11 +291,12 @@
       tree: '<path d="M12 2L8 8h3l-4 6h3l-5 6h7v2h2v-2h7l-5-6h3l-4-6h3L12 2z"/>'
     };
 
+    // Reverted back to the 2021 configuration counts
     const config = [
       { type: 'tree', count: 4, target: document.getElementById('grid-tree'), color: 'green' },
       { type: 'factory', count: 6, target: document.getElementById('grid-factory'), color: 'grey' },
-      { type: 'plug', count: 11, target: document.getElementById('grid-plug'), color: 'grey' }, 
-      { type: 'building', count: 25, target: document.getElementById('grid-building'), color: 'grey' }, 
+      { type: 'plug', count: 12, target: document.getElementById('grid-plug'), color: 'grey' }, 
+      { type: 'building', count: 23, target: document.getElementById('grid-building'), color: 'grey' }, 
       { type: 'car', count: 26, target: document.getElementById('grid-car'), color: 'grey' }
     ];
 
