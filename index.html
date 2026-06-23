@@ -3,97 +3,327 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Bird Infographic</title>
+  <title>Carbon Emissions vs Sequestration Infographic</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
+    :root {
+      --color-grey-dark: #222222;
+      --color-grey-icon: #555555;
+      --color-green-icon: #1B5E20; 
+      --color-bg-subtle: #f8f9fa;
+      --color-border: #e0e0e0;
+    }
+
     body {
-      /* Matches StoryMap's native clean typography */
-      font-family: -apple-system, BlinkMacSystemFont, "Avenir Next", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Noto Sans', sans-serif;
       background-color: transparent;
       margin: 0;
       display: flex;
       justify-content: center;
       padding: 20px;
+      color: #333;
+      font-size: 1.1rem;
     }
     
     .infographic {
-      max-width: 600px;
-      text-align: center;
-    }
-    
-    .title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 0.5rem;
-    }
-    
-    .legend {
+      max-width: 800px;
+      width: 100%;
+      margin: 0;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-size: 1rem;
-      color: #555;
-      margin-bottom: 2rem;
+      flex-direction: column;
+      gap: 32px;
     }
-    
-    /* Base color matching the screenshot */
-    .legend svg {
-      width: 24px;
-      height: 24px;
-      fill: #1B4A78; 
+
+    /* Vertical Layout: Emitted on Top, Sequestered on Bottom */
+    .visualization-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
     }
-    
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
+
+    /* Common Panel Styles */
+    .panel-emitted, .panel-sequestered {
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .panel-emitted {
+      background-color: rgba(0, 0, 0, 0.02);
+      animation-delay: 0.1s;
+    }
+
+    .panel-sequestered {
+      background-color: rgba(27, 94, 32, 0.04);
+      border-color: rgba(27, 94, 32, 0.2);
+      animation-delay: 0.2s;
+    }
+
+    .panel-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    /* Sector Specific Gestalt Groupings */
+    .sector-container {
+      display: flex;
+      flex-wrap: wrap;
       gap: 12px;
-      justify-items: center;
     }
-    
+
+    .sector-group {
+      background-color: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-content: flex-start;
+      opacity: 0;
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    /* Staggered entrance animations for individual sector blocks */
+    .group-factory  { animation-delay: 0.3s; max-width: 120px; }
+    .group-plug     { animation-delay: 0.4s; max-width: 160px; }
+    .group-building { animation-delay: 0.5s; max-width: 280px; }
+    .group-car      { animation-delay: 0.6s; max-width: 320px; }
+    .group-tree     { animation-delay: 0.7s; max-width: 120px; border-color: rgba(27, 94, 32, 0.3); }
+
+    /* Icon Sizing & Interactive States */
     .icon-wrapper {
       position: relative;
       cursor: pointer;
-      transition: transform 0.2s ease;
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
+      transition: transform 0.2s ease, opacity 0.3s ease;
     }
     
     .icon-wrapper svg {
       width: 100%;
       height: 100%;
-      fill: #1B4A78;
       transition: fill 0.2s ease;
     }
+
+    .icon-wrapper.grey svg { fill: var(--color-grey-icon); }
+    .icon-wrapper.green svg { fill: var(--color-green-icon); }
     
-    /* Interactive Hover/Focus States */
     .icon-wrapper:hover, .icon-wrapper:focus {
-      transform: translateY(-4px) scale(1.1);
+      transform: scale(1.2);
+      outline: none;
+      z-index: 10;
+    }
+    
+    .icon-wrapper.grey:hover svg, .icon-wrapper.grey:focus svg { fill: var(--color-grey-dark); }
+    .icon-wrapper.green:hover svg, .icon-wrapper.green:focus svg { fill: #0a3610; }
+
+    /* Standardized Implicit Legend Layout */
+    .legend-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid var(--color-border);
+      padding-top: 20px;
+    }
+
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, opacity 0.3s ease;
+    }
+
+    .legend-row:hover, .legend-row:focus {
+      background-color: var(--color-bg-subtle);
       outline: none;
     }
-    
-    .icon-wrapper:hover svg, .icon-wrapper:focus svg {
-      fill: #2a73ba; /* Lighter blue to indicate interactivity */
+
+    .legend-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .legend-icon.grey svg { fill: var(--color-grey-icon); }
+    .legend-icon.green svg { fill: var(--color-green-icon); }
+
+    .legend-text {
+      font-size: 1rem;
+    }
+
+    /* Unified Global Interactivity Dimming Rules */
+    .infographic.is-interacting .icon-wrapper:not(.active-group),
+    .infographic.is-interacting .legend-row:not(.active-group) {
+      opacity: 0.2;
     }
     
-    /* Accessible CSS Tooltip */
-    .icon-wrapper::after {
-      content: "10 species"; /* Tooltip text */
-      position: absolute;
-      bottom: 120%;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #222;
-      color: #fff;
-      padding: 6px 10px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-      z-index: 10;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    .infographic.is-interacting .legend-row.active-group {
+      background-color: var(--color-bg-subtle);
+      font-weight: 600;
     }
+
+    /* CSS Keyframes for Entrance Animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive scaling for embedding in narrow viewports */
+    @media (max-width: 650px) {
+      .sector-group { max-width: 100% !important; }
+      .icon-wrapper { width: 24px; height: 24px; }
+    }
+    @media (max-width: 450px) {
+      .icon-wrapper { width: 22px; height: 22px; }
+      body { padding: 10px; font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <figure class="infographic" id="info-container" aria-label="Infographic showing 67 million metric tonnes of emissions across four human sectors on the top, compared to 4 million metric tonnes of sequestered forest carbon on the bottom.">
     
-    .icon-wrapper
+    <div class="visualization-container">
+      
+      <div class="panel-emitted">
+        <div class="panel-title">Emitted</div>
+        <div class="sector-container">
+          <div class="sector-group group-factory" id="grid-factory"></div>
+          <div class="sector-group group-plug" id="grid-plug"></div>
+          <div class="sector-group group-building" id="grid-building"></div>
+          <div class="sector-group group-car" id="grid-car"></div>
+        </div>
+      </div>
+
+      <div class="panel-sequestered">
+        <div class="panel-title">Sequestered</div>
+        <div class="sector-container">
+           <div class="sector-group group-tree" id="grid-tree"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="legend-list" role="presentation">
+      <div class="legend-row row-factory" tabindex="0" data-type="factory">
+        <div class="legend-icon grey" id="leg-factory"></div>
+        <div class="legend-text"><strong>Non-Energy Sector:&nbsp;</strong> 6 million metric tonnes CO₂e</div>
+      </div>
+      <div class="legend-row row-plug" tabindex="0" data-type="plug">
+        <div class="legend-icon grey" id="leg-plug"></div>
+        <div class="legend-text"><strong>Electric Power Sector:&nbsp;</strong> 12 million metric tonnes CO₂e</div>
+      </div>
+      <div class="legend-row row-building" tabindex="0" data-type="building">
+        <div class="legend-icon grey" id="leg-building"></div>
+        <div class="legend-text"><strong>Building Sector:&nbsp;</strong> 23 million metric tonnes CO₂e</div>
+      </div>
+      <div class="legend-row row-car" tabindex="0" data-type="car">
+        <div class="legend-icon grey" id="leg-car"></div>
+        <div class="legend-text"><strong>Transportation Sector:&nbsp;</strong> 26 million metric tonnes CO₂e</div>
+      </div>
+      <div class="legend-row row-tree" tabindex="0" data-type="tree">
+        <div class="legend-icon green" id="leg-tree"></div>
+        <div class="legend-text"><strong>Forest Sequestration:&nbsp;</strong> 4 million metric tonnes CO₂e</div>
+      </div>
+    </div>
+
+  </figure>
+
+  <script>
+    const infoContainer = document.getElementById('info-container');
+    
+    const paths = {
+      factory: '<path d="M2,22H22V12H16V9L9,12V9L2,12V22Z"/>',
+      plug: '<path d="M16,7V3H14V7H10V3H8V7H6V14.5L9.5,18V21H14.5V18L18,14.5V7H16Z"/>',
+      building: '<path d="M19,3H5C3.89,3 3,3.89 3,5V21H21V5C21,3.89 20.11,3 19,3M9,19H7V17H9V19M9,15H7V13H9V15M9,11H7V9H9V11M9,7H7V5H9V7M13,19H11V17H13V19M13,15H11V13H13V15M13,11H11V9H13V11M13,7H11V5H13V7M17,19H15V17H17V19M17,15H15V13H17V15M17,11H15V9H17V11M17,7H15V5H17V7Z"/>',
+      car: '<path d="M18.92,6.01C18.72,5.42 18.16,5 17.5,5H6.5C5.84,5 5.28,5.42 5.08,6.01L3,12V20A1,1 0 0,0 4,21H5A1,1 0 0,0 6,20V19H18V20A1,1 0 0,0 19,21H20A1,1 0 0,0 21,20V12L18.92,6.01M6.5,16A1.5,1.5 0 0,1 5,14.5A1.5,1.5 0 0,1 6.5,13A1.5,1.5 0 0,1 8,14.5A1.5,1.5 0 0,1 6.5,16M17.5,16A1.5,1.5 0 0,1 16,14.5A1.5,1.5 0 0,1 17.5,13A1.5,1.5 0 0,1 19,14.5A1.5,1.5 0 0,1 17.5,16M5,11L6.5,6.5H17.5L19,11H5Z"/>',
+      tree: '<path d="M12 2L8 8h3l-4 6h3l-5 6h7v2h2v-2h7l-5-6h3l-4-6h3L12 2z"/>'
+    };
+
+    const config = [
+      { type: 'factory', count: 6, target: document.getElementById('grid-factory'), color: 'grey' },
+      { type: 'plug', count: 12, target: document.getElementById('grid-plug'), color: 'grey' },
+      { type: 'building', count: 23, target: document.getElementById('grid-building'), color: 'grey' },
+      { type: 'car', count: 26, target: document.getElementById('grid-car'), color: 'grey' },
+      { type: 'tree', count: 4, target: document.getElementById('grid-tree'), color: 'green' }
+    ];
+
+    // Populate Visual Grid Elements and Legend Samples
+    config.forEach(item => {
+      // Setup the sample icon inside the corresponding legend row
+      document.getElementById(`leg-${item.type}`).innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[item.type]}</svg>`;
+
+      // Inject the individual visual blocks
+      for (let i = 0; i < item.count; i++) {
+        const wrapper = document.createElement('div');
+        wrapper.className = `icon-wrapper group-${item.type} ${item.color}`;
+        wrapper.setAttribute('tabindex', '0');
+        wrapper.setAttribute('role', 'img');
+        wrapper.setAttribute('aria-label', `${item.type} metric unit icon`);
+        wrapper.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[item.type]}</svg>`;
+        
+        // Dynamic event attachments
+        wrapper.addEventListener('mouseenter', () => activateGroup(item.type));
+        wrapper.addEventListener('focus', () => activateGroup(item.type));
+        wrapper.addEventListener('mouseleave', clearGroup);
+        wrapper.addEventListener('blur', clearGroup);
+
+        item.target.appendChild(wrapper);
+      }
+    });
+
+    // Attach Interactivity to Legend Rows directly
+    document.querySelectorAll('.legend-row').forEach(row => {
+      const type = row.getAttribute('data-type');
+      row.addEventListener('mouseenter', () => activateGroup(type));
+      row.addEventListener('focus', () => activateGroup(type));
+      row.addEventListener('mouseleave', clearGroup);
+      row.addEventListener('blur', clearGroup);
+    });
+
+    function activateGroup(type) {
+      infoContainer.classList.add('is-interacting');
+      
+      // Target matching icons
+      document.querySelectorAll('.icon-wrapper').forEach(el => {
+        el.classList.toggle('active-group', el.classList.contains(`group-${type}`));
+      });
+
+      // Target matching legend row
+      document.querySelectorAll('.legend-row').forEach(el => {
+        el.classList.toggle('active-group', el.classList.contains(`row-${type}`));
+      });
+    }
+
+    function clearGroup() {
+      infoContainer.classList.remove('is-interacting');
+      document.querySelectorAll('.icon-wrapper, .legend-row').forEach(el => {
+        el.classList.remove('active-group');
+      });
+    }
+  </script>
+</body>
+</html>
